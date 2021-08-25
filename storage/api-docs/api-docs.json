@@ -1,0 +1,461 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Advertising manager API",
+        "contact": {
+            "email": "hofirma@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/v1/campaigns": {
+            "get": {
+                "tags": [
+                    "Campaigns"
+                ],
+                "summary": "List of Campaigns",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/CampaignsListResponse"
+                                        },
+                                        "meta": {
+                                            "$ref": "#/components/schemas/PaginatorMeta"
+                                        },
+                                        "links": {
+                                            "$ref": "#/components/schemas/PaginatorLinks"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/campaign/{campaign_id}": {
+            "post": {
+                "tags": [
+                    "Campaigns"
+                ],
+                "summary": "Update Campaign.\n     *          There is an issue with sending formdata via PUT method, so we send POST with the field _method=PUT",
+                "operationId": "d1dfaefb62ac912853db656d34542caf",
+                "parameters": [
+                    {
+                        "name": "campaign_id",
+                        "in": "path",
+                        "description": "Campaign ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": "2"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CampaignUpdateRequestBody"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/CampaignItem"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/campaign": {
+            "post": {
+                "tags": [
+                    "Campaigns"
+                ],
+                "summary": "Create a new Campaign",
+                "operationId": "df48bf8547df2183dd93aa7d2269f991",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CampaignCreateRequestBody"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/CampaignItem"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CampaignsListResponse": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/CampaignItem"
+                }
+            },
+            "CampaignItem": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "456"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Name of Campaign"
+                    },
+                    "from": {
+                        "type": "date",
+                        "example": "1976-08-22"
+                    },
+                    "to": {
+                        "type": "date",
+                        "example": "2021-07-25"
+                    },
+                    "daily_budget": {
+                        "type": "float",
+                        "example": "223.45"
+                    },
+                    "total_budget": {
+                        "type": "float",
+                        "example": "3456.98"
+                    },
+                    "images": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BannerItem"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "BannerItem": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "456"
+                    },
+                    "image_name": {
+                        "type": "string",
+                        "example": "image_234.png"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatorMeta": {
+                "properties": {
+                    "meta": {
+                        "properties": {
+                            "current_page": {
+                                "type": "integer",
+                                "example": "2"
+                            },
+                            "from": {
+                                "type": "integer",
+                                "example": "1"
+                            },
+                            "path": {
+                                "type": "string",
+                                "example": "http://localhost/api/v1/recently-converted"
+                            },
+                            "per_page": {
+                                "type": "integer",
+                                "example": "10"
+                            },
+                            "to": {
+                                "type": "integer",
+                                "example": "10"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatorLinks": {
+                "properties": {
+                    "links": {
+                        "properties": {
+                            "first": {
+                                "type": "string",
+                                "example": "http://localhost/api/v1/recently-converted?page=2"
+                            },
+                            "last": {
+                                "nullable": "true",
+                                "type": "string"
+                            },
+                            "prev": {
+                                "nullable": "true",
+                                "type": "string"
+                            },
+                            "next": {
+                                "nullable": "true",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "CampaignUpdateRequestBody": {
+                "required": [
+                    "id",
+                    "name",
+                    "daily_budget",
+                    "total_budget",
+                    "from",
+                    "to",
+                    "_method"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "test name"
+                    },
+                    "daily_budget": {
+                        "type": "float",
+                        "example": "123.55"
+                    },
+                    "total_budget": {
+                        "type": "float",
+                        "example": "557.55"
+                    },
+                    "from": {
+                        "type": "date",
+                        "example": "1976-08-22"
+                    },
+                    "to": {
+                        "type": "date",
+                        "example": "2021-07-25"
+                    },
+                    "_method": {
+                        "type": "string",
+                        "example": "PUT"
+                    },
+                    "pictures[]": {
+                        "description": "Banner image",
+                        "type": "array",
+                        "items": {
+                            "type": "file",
+                            "format": "binary"
+                        }
+                    },
+                    "imagesToRemove[]": {
+                        "description": "Banner to remove",
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CampaignCreateRequestBody": {
+                "required": [
+                    "name",
+                    "daily_budget",
+                    "total_budget",
+                    "from",
+                    "to",
+                    "pictures[]"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "name example"
+                    },
+                    "daily_budget": {
+                        "type": "float",
+                        "example": "123.55"
+                    },
+                    "total_budget": {
+                        "type": "float",
+                        "example": "557.55"
+                    },
+                    "from": {
+                        "type": "date",
+                        "example": "1976-08-22"
+                    },
+                    "to": {
+                        "type": "date",
+                        "example": "2021-07-25"
+                    },
+                    "pictures[]": {
+                        "description": "Banner image",
+                        "type": "array",
+                        "items": {
+                            "type": "file",
+                            "format": "binary"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "ErrorResponse": {
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ValidationError": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "The given data was invalid."
+                    },
+                    "errors": {
+                        "properties": {
+                            "name": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "example": "The name field is required."
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}
